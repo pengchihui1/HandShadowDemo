@@ -84,76 +84,6 @@
                 開始（5）
             </div>
         </div>
-        <!-- <div id='counter' class='text'
-            style='position: absolute;width:fit-content;height:fit-content; line-height: 100%;bottom:15px;left:50%;transform: translateX(-50%);'>
-            0/6</div> -->
-    </div>
-
-    <!-- 資訊頁面 -->
-    <div id='about' class='cover about invisible'>
-        <div class='button' style="
-            display: flex;
-            position: absolute;
-            justify-content: center;
-            right:0;
-            flex-wrap: wrap;
-            margin-right:15px;
-            margin-top:15px;
-            " onclick="toggle_about()">
-            <img src="assets/exit.svg" id="non_intractive"></img>
-        </div>
-
-        <div class='column' style='width:100%;
-        height:100%;
-        user-select:text;
-        justify-content: initial;
-        
-        '>
-            <div class='text' style="
-            height:fit-content; 
-            font-size:50px;
-            margin-top: 84px;
-            margin-bottom: 45px;
-            flex-direction: unset;
-            ">
-                About This Website
-            </div>
-
-            <div class='text' style='
-            width:60%;  
-            height:fit-content; 
-            margin-left:auto;
-            margin-right:auto;
-            margin-bottom: 138px;
-            line-height: 43px;
-
-            font-family: "niceFont";
-            font-size: 37px;
-            flex-direction: unset;
-            display: inline;
-            user-select:text;
-            '>
-                Artificial intelligence is used in the website to predict what you are drawing. An
-                implementation of the Convolutional Neural Network in Javascript. It takes an image and predicts a
-                number that represents a guess at what the image looks like.
-                <br><br>
-                The network was trained on 150 different concepts from <a class="link"
-                    href="https://quickdraw.withgoogle.com/data">Quick
-                    Draw Data</a> using Python with the TensorFlow
-                library, and the network was implemented in Javascript using TensorFlow.
-                <br><br>
-                <br>
-                The network has 28x28 image input [grayscaled and thresholded image, two values in the image 0=black,
-                1=white].
-                <br><br>
-                The recognition error on the test data set is 11% and the accuracy is 72.5%.
-                <br><br>
-                <br>
-                <br>
-                The website was created by Yousef Mahmood, and my sole purpose was to have fun. It was hugely inspired
-                by the game <a class="link" href="https://quickdraw.withgoogle.com">Quick Draw</a>.
-            </div>
-        </div>
     </div>
 
     <!-- 遊戲頁面 -->
@@ -204,6 +134,48 @@
             labels = raw_labels
         });
         load_model()
+
+        // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const flip = true; // whether to flip the webcam
+        webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop() {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        // predict can take in an image, video or canvas html element
+        const prediction = await model.predict(webcam.canvas);
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+            if (prediction[i].probability.toFixed(2) > 0.85) {
+                document.getElementById(prediction[i].className).setAttribute("class", "active")
+            } else {
+                document.getElementById(prediction[i].className).setAttribute("class", "")
+            }
+        }
+    }
 
     </script>
     <script defer src="scripts/rdp.js"></script>

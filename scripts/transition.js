@@ -5,7 +5,6 @@ const pages = {
     "main": 1,
     "card": 2,
     "game": 3,
-    "about": 4,
     "end_card": 5
 }
 
@@ -28,7 +27,7 @@ function toggle_round_card(onlyOpen = false) {
     let card = document.getElementById('round-card')
 
 
-    if (active_page != pages.card && active_page != pages.about && active_page || onlyOpen) {// 顯示卡片
+    if (active_page != pages.card && active_page || onlyOpen) {// 顯示卡片
 
         if (drawing_history.length > 20) {
             drawing_history.splice(0, 1);
@@ -121,19 +120,6 @@ function toggle_game_canvas() {
 
 }
 
-function toggle_about() {
-    if (active_page != pages.about) { //顯示咨詢
-        let about = document.getElementById('about')
-        about.className = 'cover about visible';
-        active_page = pages.about;
-        return
-    }
-    if (active_page == pages.about) { //關閉咨詢
-        let about = document.getElementById('about')
-        about.className = 'cover about invisible';
-        active_page = pages.main;
-    }
-}
 
 function enter_main() {//回車進入遊戲 清除繪畫歷史
     toggle_game_canvas()
