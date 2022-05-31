@@ -178,6 +178,27 @@ body {
   outline: none;
 }
 
+.title{
+  font-size: 69px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.example_photo{
+  display: grid;
+  /* 容納單元格 */
+  grid-template-columns: repeat(3, 1fr);
+  /* 行與行之間，列與列之間 */
+  grid-gap: 20px 20px;
+  /* 內容整體平均分佈 */
+  justify-content: space-around;
+  text-align: center;
+  margin: 10px 0;
+  color: rgb(255, 255, 255);
+
+  position: relative; 
+  top: 30%; 
+}
 
 .endP{
   position: absolute;
