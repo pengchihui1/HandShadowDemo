@@ -1,38 +1,41 @@
 
 start_button = document.getElementById('mainButton')
 
-const pages = {
-    "main": 1,
-    "card": 2,
-    "game": 3,
-    "end_card": 5
-}
+// const pages = {
+//     "main": 1,
+//     "introduction": 2,
+//     "pin_code": 3,
+//     'game_canvas': 4,
+//     "qrcode": 5,
+//     "end_card": 5
+// }
 
-var active_page = pages.main;
+// var active_page = pages.main;
 
 // 重新開始遊戲
 function again() {
-    var end_card = document.getElementById('end-card')
-    var main = document.getElementById('main')
-    var fraction = document.getElementById('fraction');
-    var prediction = document.getElementById('prediction');
+    end_card = document.getElementById('end_card')
+    main = document.getElementById('main')
+    pin_code = document.getElementById('pin_code')
     chinese = document.getElementById('introduction_chinese')
     english = document.getElementById('introduction_english')
     portuguese = document.getElementById('introduction_portuguese')
-    pin_code = document.getElementById('pin_code')
-    active_page = pages.main;//設置當前頁面
+    hand_shodow = document.getElementById('hand_shodow')
+    qrcode = document.getElementById('qrcode')
+
     main.style.display = 'block'
+    pin_code.style.display = 'none'
+
     end_card.style.display = 'none'
-    window.fractionNumber = 0 //重置得分
-    fraction.textContent = window.fractionNumber
-    prediction.style.zIndex = -10
+    clearInterval(window.endCarTimer) //清除結束頁面倒計時
 
     chinese.style.display = 'none'
     english.style.display = 'none'
     portuguese.style.display = 'none'
     clearInterval(window.languageCarTimer) //清除語言頁面倒計時
 
-    pin_code.style.display = 'none'
+    hand_shodow.style.display = 'none'
+    qrcode.style.display = 'none'
 }
 
 // 選擇語言
@@ -75,4 +78,32 @@ function language_start() {
     pin_code = document.getElementById('pin_code')
     pin_code.style.display = 'block'
     clearInterval(window.languageCarTimer) //清除語言頁面倒計時
+}
+
+function pin_code_start() {
+    hand_shodow = document.getElementById('hand_shodow')
+    hand_shodow.style.display = 'block'
+}
+
+function hand_shodow_next() {
+    qrcode = document.getElementById('qrcode')
+    qrcode.style.display = 'block'
+}
+
+
+function qrcode_next() {
+    end_card = document.getElementById('end_card')
+    end_card.style.display = 'block'
+
+    // 結束頁面倒計時
+    window.endCarNum = 10
+    $('#endButton').text(`再來！（${window.endCarNum}）`)
+    window.endCarTimer = setInterval(() => {
+        window.endCarNum -= 1
+        $('#endButton').text(`再來！（${window.endCarNum}）`)
+        if (window.endCarNum <= 0) {
+            again()
+        }
+    }, 1000)
+
 }

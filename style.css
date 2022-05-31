@@ -153,7 +153,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
 }
+
 
 .main_button>button{
   background: #00c0a3;
@@ -165,6 +167,7 @@ body {
   width:200px;
   cursor: pointer;
 }
+
 
 .pin_input{
   width:600px;
