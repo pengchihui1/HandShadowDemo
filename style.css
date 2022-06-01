@@ -153,7 +153,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
 }
 
 
@@ -195,9 +194,7 @@ body {
   text-align: center;
   margin: 10px 0;
   color: rgb(255, 255, 255);
-
-  position: relative; 
-  top: 30%; 
+  margin-top:80px;
 }
 
 .endP{
@@ -239,8 +236,6 @@ body {
   font-size: 50px;
 }
 
-
-
 #text {
   position: absolute;
   top: 100%;
@@ -257,10 +252,6 @@ body {
 
 .frame {
   fill: #ffff;
-
-  /* width:1319.13px; 
-    height:width=624px; */
-  /* background-image: url("dsaw.png");  */
 
   position: absolute;
   top: 50%;
@@ -301,224 +292,46 @@ body {
   text-decoration: underline;
 }
 
-#non_intractive {
+/* #non_intractive {
   pointer-events: none;
   user-select: none;
-}
+} */
 
-/*
-  Drawing window css
-*/
 
-canvas {
-  position: fixed;
+
+#hand_shodow canvas {
+  position: relative;
   left: 50%;
-  top: 50%;
+  top: 20%;
   transform: translate(-50%, -50%);
   background-color: #fff;
 }
 
-.label {
-  position: fixed;
-  left: 0;
-  top: 0;
-
-  background: #4b4453;
-  width: 100%;
-  height: 150px;
-  border-radius: 0 0 55px 55px;
-
-  box-shadow: 9px 8px 0 rgba(0, 0, 0, 0.2);
-
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-
-  user-select: none;
+.active{
+  box-shadow: 0px 0px 8px red;
 }
 
-.center {
-  position: relative;
-
-  width: fit-content;
-  height: 150px;
-  margin: auto;
-  /* background:#000; */
-  display: flex;
-  justify-content: center;
-
-  flex-direction: column;
+#qrcode_avatar{
+ display: flex;
+ justify-content: center;
+ margin-top: 20px;
 }
-.cover {
-  background: #4d8076;
-  position: fixed;
-  z-index: 100;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  margin: auto;
-  /* background:#000; */
-  display: flex;
-  justify-content: center;
-
-  flex-direction: column;
-
-  transition: top 0.7s cubic-bezier(0.42, 0, 0.20, 1);
+.qrcode_photo canvas,
+.qrcode_photo video,
+.qrcode_photo img{
+  width: 300px;
+  height: 300px;
+  background-color: #fff;
+  margin: 0 5px;
+  border:1px solid black
 }
-.cover.invisible {
-  top: -100%;
-}
-.cover.visible {
-  top: 0;
+  
+.qrcode_button{
+   padding-top:10px
 }
 
-.game-canvas {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  z-index: 50;
-  display: none;
-}
-.cover.about {
-  background: #4D4F80;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: auto;
-}
-.cover.about.invisible {
-  top: -100%;
-}
-.cover.about.visible {
-  top: 0;
+.qrcode_button button{
+  font-size: 20px;
+  cursor:pointer;
 }
 
-
-.timerBox {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  background: #00c0a3;
-  width: 140px;
-  height: 68px;
-  border-radius: 28px;
-
-  box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.4);
-
-  font-family: "doodleFont";
-  font-size: 29px;
-
-  user-select: none;
-
-  color: #fff;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
-
-  height: 100%;
-  width: fit-content;
-
-  user-select: none;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-
-  height: 100%;
-  width: fit-content;
-
-  margin-left: auto;
-
-  user-select: none;
-}
-
-.button {
-  width: 52px;
-  height: 52px;
-  border-radius: 100%;
-  background: #fff;
-  box-shadow: 5px 2px 0 rgba(0, 0, 0, 0.4);
-
-  position: relative;
-
-  display: flex;
-  text-align: center;
-  align-content: center;
-  justify-content: center;
-
-  user-select: none;
-
-  cursor: pointer;
-
-  transition: background-color 0.5s cubic-bezier(0.09, 0.385, 0, 0.975),
-    transform 0.35s cubic-bezier(0.09, 0.385, 0, 0.975);
-}
-
-.button:hover {
-  background-color: #00c0a3;
-}
-
-.button:active {
-  transform: scale(1.1, 1.1);
-}
-.text {
-  height: 100%;
-  width: 100%;
-
-  font-family: "doodleFont";
-  font-size: 30px;
-
-  user-select: none;
-
-  color: #fff;
-
-  position: relative;
-
-  line-height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
-}
-
-#prediction {
-  position: absolute;
-  left: 50%;
-
-  bottom: 41px;
-  transform: translate(-50%, 0px);
-
-  width: fit-content;
-  height: 95px;
-  background: #4b4453;
-
-  border-radius: 50px;
-
-  box-shadow: 9px 8px 0 rgba(0, 0, 0, 0.2);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-family: "doodleFont";
-  font-size: 38px;
-  user-select: none;
-  padding: 0px 27px 0px 27px;
-}
