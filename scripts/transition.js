@@ -222,8 +222,8 @@ function takePhoto() {
 
     ctx.drawImage(video, 0, 0, 300, 300);
 
-    // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
-    // let img = document.getElementById('canvas').toDataURL();
+    // 照片鏈接 toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
+    let img = document.getElementById('canvas').toDataURL();
 
     // 这里的img就是得到的图片
     // document.getElementById('imgTag').src = img;
