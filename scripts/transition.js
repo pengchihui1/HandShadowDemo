@@ -1,17 +1,6 @@
 
 start_button = document.getElementById('mainButton')
 
-// const pages = {
-//     "main": 1,
-//     "introduction": 2,
-//     "pin_code": 3,
-//     'game_canvas': 4,
-//     "qrcode": 5,
-//     "end_card": 5
-// }
-
-// var active_page = pages.main;
-
 // 重新開始遊戲
 function again() {
     end_card = document.getElementById('end_card')
@@ -146,9 +135,6 @@ async function hand_shodow_next() {
     qrcode.style.display = 'block'
     // 清空內容
     clear()
-    // 頭像截圖不給點擊
-    // document.getElementById('intercept').onclick = false
-    // $("#intercept").css('cursor', 'no-drop')
 }
 
 let isStart = false
@@ -160,9 +146,6 @@ async function photograph_start() {
 
     window.requestAnimationFrame(photograph_loop);//實時更新動畫
     $("#qrcode_avatar_1 canvas").replaceWith(webcam.canvas)//拍照視線窗口
-
-    // $("#intercept").click(function () { intercept() })
-    // $("#intercept").css('cursor', 'pointer')
 }
 
 function photograph_loop() {
@@ -177,6 +160,7 @@ function intercept() {
     photograph_start()//重新截取會保留上一時刻的東西
 }
 
+// 進入到結束頁面
 function qrcode_next() {
     end_card = document.getElementById('end_card')
     end_card.style.display = 'block'
@@ -192,6 +176,8 @@ function qrcode_next() {
         }
     }, 1000)
 
+    // 關掉拍照
+    closeMedia()
 }
 
 // 摄影停止
@@ -199,10 +185,10 @@ async function clear() {
     if (state) state = false  // 停止手影猜測
     // 手影比對視線窗口還原
     $("#hand_shodow canvas").replaceWith('<canvas width="300" height="300"></canvas>')
-    // 拍照視線窗口還原
-    $("#qrcode_avatar canvas").replaceWith('')
-    $("#qrcode_avatar_1").append('<canvas></canvas>')
-    $("#qrcode_avatar_2").append('<canvas></canvas>')
+    //
+    $("#video").replaceWith('<video id="video" autoplay="autoplay"></video>')
+    $("#canvas").replaceWith('<canvas id="canvas"></canvas>')
+    // $("#imgTag").replaceWith('<img id="imgTag" src="assets/image/avatar.jpg" alt="imgTag"/>')
 }
 
 let mediaStreamTrack = null; // 视频对象(全局)
@@ -227,18 +213,24 @@ function takePhoto() {
     //获得Canvas对象
     let video = document.getElementById('video');
     let canvas = document.getElementById('canvas');
+
+    // 高分辨率屏幕上清晰显示canvas图形
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+
     let ctx = canvas.getContext('2d');
 
-    ctx.drawImage(video, 0, 0, 300, 150);
+    ctx.drawImage(video, 0, 0, 300, 300);
 
     // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
-    let img = document.getElementById('canvas').toDataURL();
+    // let img = document.getElementById('canvas').toDataURL();
+
     // 这里的img就是得到的图片
-    console.log('img-----', img);
-    document.getElementById('imgTag').src = img;
+    // document.getElementById('imgTag').src = img;
 }
 
 // 关闭摄像头
 function closeMedia() {
     mediaStreamTrack.stop();
 }
+

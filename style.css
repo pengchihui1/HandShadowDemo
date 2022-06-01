@@ -17,8 +17,6 @@ body {
   width: 90px;
   height: 90px;
 
-  /* background: #845ec2; */
-
   position: absolute;
 
   text-align: center;
@@ -118,7 +116,6 @@ body {
   font-family: "doodleFont";
   text-align: center;
   vertical-align: middle;
-  user-select: none;
 
   transition: background-color 0.5s cubic-bezier(0.09, 0.385, 0, 0.975),
     transform 0.5s cubic-bezier(0.09, 0.385, 0, 0.975);
@@ -323,7 +320,7 @@ body {
   height: 300px;
   background-color: #fff;
   margin: 0 5px;
-  border:1px solid black
+  /* border:1px solid black */
 }
   
 .qrcode_button{
