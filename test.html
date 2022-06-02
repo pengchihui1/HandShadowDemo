@@ -33,21 +33,30 @@
         //获得Canvas对象
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
+
+        // 高分辨率
+        canvas.width=canvas. clientWidth*window.devicePixelRatio;
+        canvas.height=canvas.clientHeight*window.devicePixelRatio;  
+
         let ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, 500, 500);
 
         let bgImg1=new Image()
-        bgImg1.src='./assets/image/pikachu_1.jpg'
+        bgImg1.src='./assets/image/transparent/dragon1.png'
 
         let bgImg2=new Image()
-        bgImg2.src='./assets/image/pikachu_2.jpg'
+        bgImg2.src='./assets/image/transparent/dragon2.png'
 
         let bgImg3=new Image()
-        bgImg3.src='./assets/image/pikachu_3.jpg'
+        bgImg3.src='./assets/image/transparent/pikachu1.png'
 
-        ctx.drawImage(bgImg1, 10, 10, 100, 100);
-        ctx.drawImage(bgImg2, 120, 10, 100, 100);
-        ctx.drawImage(bgImg3, 250, 10, 100, 100);
+        let bgImg4=new Image()
+        bgImg4.src='./assets/image/transparent/pikachu2.png'
+
+        ctx.drawImage(bgImg1, 0, 0, 100, 100);
+        ctx.drawImage(bgImg2, 400, 0, 100, 100);
+        ctx.drawImage(bgImg3, 0, 400, 100, 100);
+        ctx.drawImage(bgImg4, 400, 400, 100, 100);
 
         // toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
         let img = document.getElementById('canvas').toDataURL();
@@ -59,5 +68,10 @@
     function closeMedia() {
         mediaStreamTrack.stop();
     }
+
+    function drawImages(){
+
+    }
+    
 </script>
 </body>

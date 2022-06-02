@@ -75,7 +75,8 @@ function pin_code_start() {
 }
 
 let model, webcam, labelContainer, maxPredictions;
-let state = false//用来关闭不管猜测的数据
+let state = false //用来关闭不管猜测的数据
+let hand_shadow_name = '' //猜測的手影名稱
 
 // 加載圖像模型並設置網絡攝像頭
 async function sight() {
@@ -105,6 +106,7 @@ async function loop() {
     }
 }
 
+
 async function predict() {
     const prediction = await model.predict(webcam.canvas); //實時類的概率
     for (let i = 0; i < maxPredictions; i++) {
@@ -122,6 +124,7 @@ async function predict() {
 
         // 概率大於0.85的手影圖片，突出邊框
         if (prediction[i].probability.toFixed(2) > 0.8) {
+            hand_shadow_name = prediction[i].className//記錄猜測的手影名稱
             $("#hand_shodow img")[i].setAttribute("class", "active")
         } else {
             $("#hand_shodow img")[i].setAttribute("class", "")
@@ -194,7 +197,7 @@ async function clear() {
 let mediaStreamTrack = null; // 视频对象(全局)
 function openMedia() {
     let constraints = {
-        video: { width: 300, height: 300 },
+        video: { width: 500, height: 500 },
         audio: true
     };
     //获得video摄像头
@@ -220,7 +223,17 @@ function takePhoto() {
 
     let ctx = canvas.getContext('2d');
 
-    ctx.drawImage(video, 0, 0, 300, 300);
+    ctx.drawImage(video, 0, 0, 500, 500);
+
+    let bgImg = new Image()
+    if (hand_shadow_name === 'Reindeer') {
+        bgImg.src = './assets/image/transparent/dragon1.png'
+    } else if (hand_shadow_name === 'Dog') {
+        bgImg.src = './assets/image/transparent/dragon1.png'
+    } else if (hand_shadow_name === 'Eagle') {
+        bgImg.src = './assets/image/transparent/dragon1.png'
+    }
+    ctx.drawImage(bgImg1, 0, 0, 100, 100);
 
     // 照片鏈接 toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
     let img = document.getElementById('canvas').toDataURL();
