@@ -195,10 +195,9 @@ async function clear() {
     if (state) state = false  // 停止手影猜測
     // 手影比對視線窗口還原
     $("#hand_shodow canvas").replaceWith('<canvas width="300" height="300"></canvas>')
-    //
+    // 拍照還原
     $("#video").replaceWith('<video id="video" autoplay="autoplay"></video>')
-    $("#canvas").replaceWith('<canvas id="canvas"></canvas>')
-
+    $("#imgTag").replaceWith('<img id="imgTag" src="assets/image/avatar.jpg" alt="imgTag"/>')
 }
 
 let mediaStreamTrack = null; // 视频对象(全局)
