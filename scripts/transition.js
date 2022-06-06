@@ -25,6 +25,9 @@ function again() {
 
     hand_shodow.style.display = 'none'
     qrcode.style.display = 'none'
+
+    // 清空手影名稱
+    hand_shadow_name = ''
 }
 
 // 選擇語言
@@ -108,26 +111,29 @@ async function loop() {
 
 
 async function predict() {
-    const prediction = await model.predict(webcam.canvas); //實時類的概率
-    for (let i = 0; i < maxPredictions; i++) {
-        // 猜測的結果
-        const classPrediction = prediction[i].className + "（" + prediction[i].probability.toFixed(2) + "）";
+    if (state) {
+        const prediction = await model.predict(webcam.canvas); //實時類的概率
 
-        // 顯示 Reindeer Dog Eagle 實時猜測值
-        if (classPrediction.includes("Reindeer")) {
-            $("#hand_shodow p")[i].innerHTML = classPrediction
-        } else if (classPrediction.includes("Dog")) {
-            $("#hand_shodow p")[i].innerHTML = classPrediction
-        } else if (classPrediction.includes("Eagle")) {
-            $("#hand_shodow p")[i].innerHTML = classPrediction
-        }
+        for (let i = 0; i < maxPredictions; i++) {
+            // 猜測的結果
+            const classPrediction = prediction[i].className + "（" + prediction[i].probability.toFixed(2) + "）";
 
-        // 概率大於0.85的手影圖片，突出邊框
-        if (prediction[i].probability.toFixed(2) > 0.8) {
-            hand_shadow_name = prediction[i].className//記錄猜測的手影名稱
-            $("#hand_shodow img")[i].setAttribute("class", "active")
-        } else {
-            $("#hand_shodow img")[i].setAttribute("class", "")
+            // 顯示 Reindeer Dog Eagle 實時猜測值
+            if (classPrediction.includes("Reindeer")) {
+                $("#hand_shodow p")[i].innerHTML = classPrediction
+            } else if (classPrediction.includes("Dog")) {
+                $("#hand_shodow p")[i].innerHTML = classPrediction
+            } else if (classPrediction.includes("Eagle")) {
+                $("#hand_shodow p")[i].innerHTML = classPrediction
+            }
+
+            // 概率大於0.85的手影圖片，突出邊框
+            if (prediction[i].probability.toFixed(2) > 0.8) {
+                hand_shadow_name = prediction[i].className//記錄猜測的手影名稱
+                $("#hand_shodow img")[i].setAttribute("class", "active")
+            } else {
+                $("#hand_shodow img")[i].setAttribute("class", "")
+            }
         }
     }
 }
@@ -181,6 +187,7 @@ function qrcode_next() {
 
     // 關掉拍照
     closeMedia()
+
 }
 
 // 摄影停止
@@ -191,13 +198,13 @@ async function clear() {
     //
     $("#video").replaceWith('<video id="video" autoplay="autoplay"></video>')
     $("#canvas").replaceWith('<canvas id="canvas"></canvas>')
-    // $("#imgTag").replaceWith('<img id="imgTag" src="assets/image/avatar.jpg" alt="imgTag"/>')
+
 }
 
 let mediaStreamTrack = null; // 视频对象(全局)
 function openMedia() {
     let constraints = {
-        video: { width: 500, height: 500 },
+        video: { width: 300, height: 300 },
         audio: true
     };
     //获得video摄像头
@@ -212,38 +219,60 @@ function openMedia() {
 
 // 拍照
 function takePhoto() {
-
     //获得Canvas对象
     let video = document.getElementById('video');
-    let canvas = document.getElementById('canvas');
-
-    // 高分辨率屏幕上清晰显示canvas图形
-    canvas.width = canvas.clientWidth * window.devicePixelRatio;
-    canvas.height = canvas.clientHeight * window.devicePixelRatio;
-
-    let ctx = canvas.getContext('2d');
-
-    ctx.drawImage(video, 0, 0, 500, 500);
-
-    let bgImg = new Image()
-    if (hand_shadow_name === 'Reindeer') {
-        bgImg.src = './assets/image/transparent/dragon1.png'
-    } else if (hand_shadow_name === 'Dog') {
-        bgImg.src = './assets/image/transparent/dragon1.png'
-    } else if (hand_shadow_name === 'Eagle') {
-        bgImg.src = './assets/image/transparent/dragon1.png'
-    }
-    ctx.drawImage(bgImg1, 0, 0, 100, 100);
-
-    // 照片鏈接 toDataURL  ---  可传入'image/png'---默认, 'image/jpeg'
-    let img = document.getElementById('canvas').toDataURL();
 
     // 这里的img就是得到的图片
-    // document.getElementById('imgTag').src = img;
+    imgSrc(video, 100, 100).then(src => {
+        document.getElementById('imgTag').src = src;
+    })
 }
 
 // 关闭摄像头
 function closeMedia() {
     mediaStreamTrack.stop();
+}
+
+
+/**
+ * 返回新的图片
+ * @param {Number} cwith 画布宽度 默认500
+ * @param {Number} cheight 画布高度 默认500
+ */
+function imgSrc(video, cwith = 100, cheight = 100) {
+    return new Promise((resolve, reject) => {
+
+        // 创建 canvas 节点并初始化
+        const canvas = document.createElement('canvas')
+        canvas.id = 'canvas';
+        canvas.width = 300;
+        canvas.height = 300;
+
+        // let canvas = document.getElementById('canvas');//獲得一個節點
+        // 高分辨率屏幕上清晰显示canvas图形（獲取canvas時使用）
+        // canvas.width = canvas.clientWidth * window.devicePixelRatio;
+        // canvas.height = canvas.clientHeight * window.devicePixelRatio;
+
+        const context = canvas.getContext('2d')
+
+        let bgImg = new Image()
+        if (hand_shadow_name === 'Reindeer') {
+            bgImg.src = './assets/image/transparent/pikachu1.png'
+        } else if (hand_shadow_name === 'Dog') {
+            bgImg.src = './assets/image/transparent/dragon1.png'
+        } else if (hand_shadow_name === 'Eagle') {
+            bgImg.src = './assets/image/transparent/tiger1.png'
+        }
+
+        // 跨域
+        bgImg.crossOrigin = 'Anonymous'
+
+        bgImg.onload = () => {
+            context.drawImage(video, 0, 0, 300, 300);//頭像放入canvas
+            context.drawImage(bgImg, 0, 0, cwith, cheight)
+            const src = canvas.toDataURL('image/png')
+            resolve(src)
+        }
+    })
 }
 
