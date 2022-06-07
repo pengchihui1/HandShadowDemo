@@ -3,28 +3,17 @@ start_button = document.getElementById('mainButton')
 
 // 重新開始遊戲
 function again() {
-    end_card = document.getElementById('end_card')
-    main = document.getElementById('main')
-    pin_code = document.getElementById('pin_code')
-    chinese = document.getElementById('introduction_chinese')
-    english = document.getElementById('introduction_english')
-    portuguese = document.getElementById('introduction_portuguese')
-    hand_shodow = document.getElementById('hand_shodow')
-    qrcode = document.getElementById('qrcode')
-
-    main.style.display = 'block'
-    pin_code.style.display = 'none'
-
-    end_card.style.display = 'none'
+    $("#main").css('display', 'block');
+    $("#end_card").css('display', 'none');
     clearInterval(window.endCarTimer) //清除結束頁面倒計時
-
-    chinese.style.display = 'none'
-    english.style.display = 'none'
-    portuguese.style.display = 'none'
+    $("#pin_code").css('display', 'none');
+    $("#introduction_chinese").css('display', 'none');
+    $("#introduction_english").css('display', 'none');
+    $("#introduction_portuguese").css('display', 'none');
     clearInterval(window.languageCarTimer) //清除語言頁面倒計時
-
-    hand_shodow.style.display = 'none'
-    qrcode.style.display = 'none'
+    $("#hand_shodow").css('display', 'none');
+    $("#qrcode").css('display', 'none');
+    $("#qr_code_page").css('display', 'none');
 
     // 清空手影名稱
     hand_shadow_name = ''
@@ -144,6 +133,8 @@ async function hand_shodow_next() {
     qrcode.style.display = 'block'
     // 清空內容
     clear()
+    // 開啟拍照攝像頭
+    openMedia()
 }
 
 let isStart = false
@@ -201,6 +192,8 @@ async function clear() {
 }
 
 let mediaStreamTrack = null; // 视频对象(全局)
+
+// 開始攝像頭
 function openMedia() {
     let constraints = {
         video: { width: 300, height: 300 },
@@ -214,6 +207,18 @@ function openMedia() {
         video.srcObject = mediaStream;
         video.play();
     });
+
+    window.openMediaNum = 10
+    $("#qrcode_p").text(`拍照（${window.openMediaNum}）`)
+    window.openMediaNumTimer = setInterval(() => {
+        window.openMediaNum -= 1
+        $("#qrcode_p").text(`拍照（${window.openMediaNum}）`)
+        if (window.openMediaNum <= 0) {
+            //  過兩秒進入下一頁
+            clearInterval(window.openMediaNumTimer)
+            takePhoto()
+        }
+    }, 1000)
 }
 
 // 拍照
@@ -225,6 +230,19 @@ function takePhoto() {
     imgSrc(video, 100, 100).then(src => {
         document.getElementById('imgTag').src = src;
     })
+
+    window.nextPageNum = 2
+    window.nextPageNumNumTimer = setInterval(() => {
+        window.nextPageNum -= 1
+        if (window.nextPageNum <= 0) {
+            //  過兩秒進入下一頁
+            clearInterval(window.nextPageNumNumTimer)
+            $("#qr_code_page").css('display', 'block');
+            $("#qrcode").css('display', 'none');
+            clear()// 清空內容
+        }
+    }, 1000)
+
 }
 
 // 关闭摄像头

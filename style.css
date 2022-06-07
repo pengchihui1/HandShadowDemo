@@ -316,12 +316,9 @@ body {
   margin: 0 5px;
 }
   
-.qrcode_button{
-   padding-top:10px
+.qrcode_p{
+  color:  #fff;
+  font-size: 30px;
+  margin: 10px;
+  text-align: center;
 }
-
-.qrcode_button button{
-  font-size: 20px;
-  cursor:pointer;
-}
-
