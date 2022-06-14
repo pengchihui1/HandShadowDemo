@@ -64,6 +64,17 @@ function language_start() {
 function pin_code_start() {
     hand_shodow = document.getElementById('hand_shodow')
     hand_shodow.style.display = 'block'
+
+    // 結束頁面倒計時
+    window.handShodowNextNum = 10
+    $('.hand_shodow_next').text(`下一頁（${window.handShodowNextNum}）`)
+    window.handShodowNextTimer = setInterval(() => {
+        window.handShodowNextNum -= 1
+        $('.hand_shodow_next').text(`下一頁（${window.handShodowNextNum}）`)
+        if (window.handShodowNextNum <= 0) {
+            hand_shodow_next()//進入拍照頁面
+        }
+    }, 1000)
 }
 
 let model, webcam, labelContainer, maxPredictions;
@@ -108,16 +119,31 @@ async function predict() {
             const classPrediction = prediction[i].className + "（" + prediction[i].probability.toFixed(2) + "）";
 
             // 顯示 Reindeer Dog Eagle 實時猜測值
-            if (classPrediction.includes("Reindeer")) {
+            // if (classPrediction.includes("Reindeer")) {
+            //     $("#hand_shodow p")[i].innerHTML = classPrediction
+            // } else if (classPrediction.includes("Dog")) {
+            //     $("#hand_shodow p")[i].innerHTML = classPrediction
+            // } else if (classPrediction.includes("Eagle")) {
+            //     $("#hand_shodow p")[i].innerHTML = classPrediction
+            // }
+
+            // BigCrad Goat Kitten Owl RedBird Trukey
+            if (classPrediction.includes("BigCrad")) {
                 $("#hand_shodow p")[i].innerHTML = classPrediction
-            } else if (classPrediction.includes("Dog")) {
+            } else if (classPrediction.includes("Goat")) {
                 $("#hand_shodow p")[i].innerHTML = classPrediction
-            } else if (classPrediction.includes("Eagle")) {
+            } else if (classPrediction.includes("Kitten")) {
+                $("#hand_shodow p")[i].innerHTML = classPrediction
+            } else if (classPrediction.includes("Owl")) {
+                $("#hand_shodow p")[i].innerHTML = classPrediction
+            } else if (classPrediction.includes("RedBird")) {
+                $("#hand_shodow p")[i].innerHTML = classPrediction
+            } else if (classPrediction.includes("Trukey")) {
                 $("#hand_shodow p")[i].innerHTML = classPrediction
             }
 
             // 概率大於0.85的手影圖片，突出邊框
-            if (prediction[i].probability.toFixed(2) > 0.8) {
+            if (prediction[i].probability.toFixed(2) > 0.7) {
                 hand_shadow_name = prediction[i].className//記錄猜測的手影名稱
                 $("#hand_shodow img")[i].setAttribute("class", "active")
             } else {
@@ -128,6 +154,7 @@ async function predict() {
 }
 
 async function hand_shodow_next() {
+    clearInterval(window.handShodowNextTimer) // 清空定時器
     // 顯示拍照頁面
     qrcode = document.getElementById('qrcode')
     qrcode.style.display = 'block'
@@ -227,11 +254,12 @@ function takePhoto() {
     let video = document.getElementById('video');
 
     // 这里的img就是得到的图片
-    imgSrc(video, 100, 100).then(src => {
+    imgSrc(video).then(src => {
         document.getElementById('imgTag').src = src;
     })
 
-    window.nextPageNum = 2
+    // 拍照倒計時會進入結束頁面
+    window.nextPageNum = 5
     window.nextPageNumNumTimer = setInterval(() => {
         window.nextPageNum -= 1
         if (window.nextPageNum <= 0) {
@@ -264,6 +292,7 @@ function imgSrc(video, cwith = 100, cheight = 100) {
         canvas.id = 'canvas';
         canvas.width = 300;
         canvas.height = 300;
+        canvas.style.objectFit = 'cover';
 
         // let canvas = document.getElementById('canvas');//獲得一個節點
         // 高分辨率屏幕上清晰显示canvas图形（獲取canvas時使用）
@@ -273,19 +302,35 @@ function imgSrc(video, cwith = 100, cheight = 100) {
         const context = canvas.getContext('2d')
 
         let bgImg = new Image()
-        if (hand_shadow_name === 'Reindeer') {
+        // Reindeer Dog Eagle
+        // if (hand_shadow_name === 'Reindeer') {
+        //     bgImg.src = './assets/image/transparent/pikachu1.png'
+        // } else if (hand_shadow_name === 'Dog') {
+        //     bgImg.src = './assets/image/transparent/dragon1.png'
+        // } else if (hand_shadow_name === 'Eagle') {
+        //     bgImg.src = './assets/image/transparent/tiger1.png'
+        // }
+
+        // BigCrad Goat Kitten Owl RedBird Trukey
+        if (hand_shadow_name === 'BigCrad') {
             bgImg.src = './assets/image/transparent/pikachu1.png'
-        } else if (hand_shadow_name === 'Dog') {
+        } else if (hand_shadow_name === 'Goat') {
             bgImg.src = './assets/image/transparent/dragon1.png'
-        } else if (hand_shadow_name === 'Eagle') {
-            bgImg.src = './assets/image/transparent/tiger1.png'
+        } else if (hand_shadow_name === 'Kitten') {
+            bgImg.src = './assets/image/transparent/donaldDuck1.png'
+        } else if (hand_shadow_name === 'Owl') {
+            bgImg.src = './assets/image/transparent/garfield1.png'
+        } else if (hand_shadow_name === 'RedBird') {
+            bgImg.src = './assets/image/transparent/pluto1.png'
+        } else if (hand_shadow_name === 'Trukey') {
+            bgImg.src = './assets/image/transparent/winnie1.png'
         }
 
         // 跨域
         bgImg.crossOrigin = 'Anonymous'
 
         bgImg.onload = () => {
-            context.drawImage(video, 0, 0, 300, 300);//頭像放入canvas
+            context.drawImage(video, 0, 0, 300, 300); // 頭像放入canvas
             context.drawImage(bgImg, 0, 0, cwith, cheight)
             const src = canvas.toDataURL('image/png')
             resolve(src)
